@@ -30,31 +30,95 @@ function celebrateWithConfetti() {
     setTimeout(shoot, 200);
 }
 
-function addNumbers() {
+function toggleSecondInput() {
+    const operation = document.getElementById('operation').value;
+    const num2Input = document.getElementById('num2');
+    
+    if (operation === 'sqrt') {
+        num2Input.style.display = 'none';
+    } else {
+        num2Input.style.display = 'block';
+    }
+}
+
+function calculate() {
     const resultElement = document.getElementById('result');
+    const operation = document.getElementById('operation').value;
     
     // Get the input values
     const num1 = parseFloat(document.getElementById('num1').value);
     const num2 = parseFloat(document.getElementById('num2').value);
     
-    // Reset animation by removing and re-adding the class
+    // Reset animation
     resultElement.classList.remove('show');
     void resultElement.offsetWidth; // Trigger reflow
     
-    // Check if the inputs are valid numbers
-    if (isNaN(num1) || isNaN(num2)) {
-        resultElement.textContent = 'Please enter valid numbers';
+    // Validate first number
+    if (isNaN(num1)) {
+        resultElement.textContent = 'Please enter a valid number';
         resultElement.classList.add('show');
         return;
     }
     
-    // Calculate the sum
-    const sum = num1 + num2;
+    // Calculate based on operation
+    let result;
+    let error = false;
     
-    // Display the result with animation
-    resultElement.textContent = `Result: ${sum}`;
+    switch(operation) {
+        case 'add':
+            if (isNaN(num2)) {
+                error = 'Please enter a second number';
+                break;
+            }
+            result = num1 + num2;
+            break;
+            
+        case 'subtract':
+            if (isNaN(num2)) {
+                error = 'Please enter a second number';
+                break;
+            }
+            result = num1 - num2;
+            break;
+            
+        case 'multiply':
+            if (isNaN(num2)) {
+                error = 'Please enter a second number';
+                break;
+            }
+            result = num1 * num2;
+            break;
+            
+        case 'divide':
+            if (isNaN(num2)) {
+                error = 'Please enter a second number';
+                break;
+            }
+            if (num2 === 0) {
+                error = 'Cannot divide by zero';
+                break;
+            }
+            result = num1 / num2;
+            break;
+            
+        case 'sqrt':
+            if (num1 < 0) {
+                error = 'Cannot calculate square root of a negative number';
+                break;
+            }
+            result = Math.sqrt(num1);
+            break;
+    }
+    
+    // Display result or error
+    if (error) {
+        resultElement.textContent = error;
+    } else {
+        // Format the result to handle long decimal places
+        result = Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
+        resultElement.textContent = `${result}`;
+        celebrateWithConfetti();
+    }
+    
     resultElement.classList.add('show');
-    
-    // Trigger confetti celebration
-    celebrateWithConfetti();
 }
