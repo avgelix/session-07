@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Calculator</title>
+    <style>
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes patternMove {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(20px) translateY(0); }
+            50% { transform: translateX(20px) translateY(20px); }
+            75% { transform: translateX(0) translateY(20px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(-45deg, #00FFFF, #FF1493, #FFD700, #00FF00);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+            animation: patternMove 20s linear infinite;
+            pointer-events: none;
+        }
+        .calculator {
+            background-color: #FF1493;
+            padding: 2rem;
+            border: 8px ridge #FFD700;
+            box-shadow: 10px 10px 0 #000000;
+            max-width: 500px;
+            text-align: center;
+        }
+        .calculator h2 {
+            color: #FFFF00;
+            text-shadow: 2px 2px 0 #000000, -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000;
+            font-size: 2.5em;
+            margin-bottom: 1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        @keyframes inputFocus {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        @keyframes buttonPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            border: 3px inset #c0c0c0;
+            background: #ffffff;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1.2em;
+            width: 150px;
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            animation: inputFocus 0.5s ease;
+            outline: none;
+            transform: translateY(-2px);
+        }
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(to bottom, #00FF00, #008000);
+            color: white;
+            border: 3px outset #00FF00;
+            cursor: pointer;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+            text-shadow: 2px 2px 0 #000000;
+            transition: all 0.3s ease;
+            animation: buttonPulse 2s infinite;
+        }
+        button:hover {
+            background: linear-gradient(to bottom, #008000, #00FF00);
+            border: 3px inset #00FF00;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.4);
+        }
+        button:active {
+            border-style: inset;
+            transform: translateY(1px);
+            box-shadow: 0 2px 5px rgba(0, 255, 0, 0.4);
+        }
+        @keyframes resultPopIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes resultGlow {
+            0% { box-shadow: 0 0 5px #FFD700; }
+            50% { box-shadow: 0 0 20px #FFD700; }
+            100% { box-shadow: 0 0 5px #FFD700; }
+        }
+        #result {
+            margin-top: 1.5rem;
+            font-size: 1.8rem;
+            color: #FFFF00;
+            text-shadow: 2px 2px 0 #000000;
+            background-color: #000000;
+            padding: 10px;
+            border: 3px ridge #FFD700;
+            opacity: 0;
+            transform: scale(0);
+            animation: resultGlow 2s infinite;
+        }
+        #result.show {
+            animation: resultPopIn 0.5s forwards, resultGlow 2s infinite;
+        }
+        marquee {
+            color: #FF00FF;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <marquee scrollamount="5">★·.·´¯`·.·★ WELCOME TO THE AWESOME NUMBER CALCULATOR ★·.·´¯`·.·★</marquee>
+        <h2>⚡ Add Two Numbers ⚡</h2>
+        <div>
+            <input type="number" id="num1" placeholder="Enter first number">
+            <br>
+            <input type="number" id="num2" placeholder="Enter second number">
+        </div>
+        <button onclick="addNumbers()">✨ Add Numbers ✨</button>
+        <div id="result"></div>
+        <marquee direction="right" scrollamount="3">~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~</marquee>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
